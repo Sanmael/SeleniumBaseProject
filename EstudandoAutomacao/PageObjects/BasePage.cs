@@ -1,19 +1,26 @@
 ﻿using EstudandoAutomacao.PageObjects.Interfaces;
 using Microsoft.Extensions.Configuration;
 using OpenQA.Selenium;
-using ConfigurationManager = EstudandoAutomacao.ConfigurationManager;
+using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 
 public class BasePage : IPage, IDisposable
 {
     protected readonly IWebDriver driver;
     protected readonly IConfiguration configuration;
 
-    public BasePage(IWebDriver driver) : this(driver, ConfigurationManager.Configuration) { }
-
-    public BasePage(IWebDriver driver, IConfiguration configuration)
+    public BasePage(IWebDriver driver, [CallerFilePath] string callerPath = "")
     {
+        string directoryPath = Regex.Replace(callerPath, @"[^\\]+$", "");
+
+        var builder = new ConfigurationBuilder()
+           .SetBasePath(directoryPath)
+           .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+        configuration = builder.Build();
+
         this.driver = driver;
-        this.configuration = configuration;
+        this.configuration = builder.Build();
     }
 
     public IConfigurationSection GetConfigurationSection(string key)
