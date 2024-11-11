@@ -1,22 +1,20 @@
-using EstudandoAutomacao.PageObjects;
-using EstudandoAutomacao.PageObjects.Pages;
-using OpenQA.Selenium;
+﻿using EstudandoAutomacao.PageObjects.Pages;
 
 namespace EstudandoAutomacao
 {
     [Parallelizable(scope: ParallelScope.Children)]
-    public class Tests 
+    public class Tests2 
     {
         [OneTimeSetUp]
         public async Task SetupAsync()
         {
-            
+
         }
 
         [OneTimeTearDown]
         public void TearDown()
         {
-            
+
         }
 
         [Test]

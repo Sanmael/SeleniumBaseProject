@@ -1,8 +1,11 @@
-﻿using EstudandoAutomacao.PageObjects.Pages.Login;
+﻿using EstudandoAutomacao.PageObjects;
+using EstudandoAutomacao.PageObjects.Pages.Login;
 using Microsoft.Extensions.Configuration;
 using OpenQA.Selenium;
+using System;
 
-public class LoginPage : BasePage
+
+public class LoginPage : BasePage, ILoginFactory
 {
     private By UserName { get; } = By.Name(PageIds.UsernameFieldId);
     private By Password { get; } = By.Name(PageIds.PasswordFieldId);
@@ -10,10 +13,10 @@ public class LoginPage : BasePage
 
     private PageProperties _properties;
 
-    public LoginPage(IWebDriver driver) : base(driver) 
+    public LoginPage(IWebDriver driver) : base(driver)
     {
         _properties = GetConfigurationSection(nameof(PageProperties)).Get<PageProperties>()!;
-        driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(_properties.TimeOut);       
+        driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(_properties.TimeOut);
     }
 
     public void GoToLoginPage()
@@ -39,5 +42,18 @@ public class LoginPage : BasePage
     public bool ValidateIfIsLogged()
     {
         return driver.Url.Contains("/dashboard");
+    }
+
+    public void LoadUsers()
+    {
+        GoToLoginPage();
+        EnterUsername();
+        EnterPassword();
+        ClickLoginButton();
+    }
+
+    public void ReturnToHomePage(IWebDriver webDriver)
+    {
+        webDriver.Navigate().GoToUrl("https://www.google.com.br/");
     }
 }
